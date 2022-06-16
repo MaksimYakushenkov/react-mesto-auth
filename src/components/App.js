@@ -65,9 +65,6 @@ function App() {
               <Login handleLogin={setLoggedIn} history={history}/>
             </Route>
           </Switch>
-          {/* 
-
-          {<Footer />} */}
           {<Footer />}
         </div>
       </div>
