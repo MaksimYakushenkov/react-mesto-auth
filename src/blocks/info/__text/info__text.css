@@ -1,0 +1,21 @@
+.info__text {
+  width: 330px;
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 29px;
+  color: #000;
+  margin: 0 0 60px;
+  padding: 0;
+  text-align: center;
+}
+
+@media screen and (min-width: 320px) and (max-width: 767px) {
+  .info__text {
+    width: 238px;
+    margin: 25px auto 0;
+    font-size: 18px;
+    line-height: 22px;
+  }
+}
