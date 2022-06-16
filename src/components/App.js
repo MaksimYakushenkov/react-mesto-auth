@@ -60,7 +60,7 @@ function App() {
               <Header>
                 <Link to="/sign-up" className="header__link">Регистрация</Link>
               </Header>
-              <Login handleLogin={setLoggedIn} history={history}/>
+              <Login handleLogin={setLoggedIn} setUserEmail={setUserEmail} history={history}/>
             </Route>
           </Switch>
           {<Footer />}

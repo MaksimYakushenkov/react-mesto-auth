@@ -32,6 +32,7 @@ class Login extends React.Component {
     auth.authorize(this.state.email, this.state.password)
     .then((data) => {
       if (data.token){
+        this.props.setUserEmail(this.state.email);
         this.setState({email: '', password: ''} ,() => {
             this.props.handleLogin();
             this.props.history.push('/');
