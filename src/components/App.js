@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch, Redirect, Link, withRouter, useHistory } from "react-router-dom";
+import { Route, Switch, Link, withRouter, useHistory } from "react-router-dom";
 import * as auth from '../utils/auth';
 import ProtectedRoute from './ProtectedRoute ';
 import Login from './Login';
@@ -14,7 +14,7 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [userEmail, setUserEmail] = React.useState('Email here');
   const history = useHistory();
-    
+  
   React.useEffect(() => {
     tokenCheck();
   }, []);
@@ -34,9 +34,7 @@ function App() {
         }
       }); 
     }
-  } 
-  
-  
+  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>

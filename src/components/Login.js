@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import * as auth from '../utils/auth';
 
 class Login extends React.Component {
@@ -12,15 +12,12 @@ class Login extends React.Component {
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    
   }
-
-  
 
   handleChange(e) {
     const {name, value} = e.target;
     this.setState({
-      [name]: value 
+      [name]: value
     });
   }
 
@@ -31,6 +28,7 @@ class Login extends React.Component {
     if (!this.state.email || !this.state.password){
       return;
     }
+
     auth.authorize(this.state.email, this.state.password)
     .then((data) => {
       if (data.token){
@@ -41,7 +39,6 @@ class Login extends React.Component {
       }  
     })
     .catch(err => console.log(err)); 
-
   }
   
   render() {

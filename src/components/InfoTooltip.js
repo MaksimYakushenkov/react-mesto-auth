@@ -10,7 +10,7 @@ function InfoTooltip(props) {
   return (
     <div className={`info ${props.isDone && 'info_opened'}` }>
       <div className="info__container">
-        <img className="info__image" src={props.img} />
+        <img className="info__image" alt="Информационная картинка" src={props.img} />
         <p className="info__text">{props.text}</p>
         <button className="info__close-button" onClick={handleClose}></button>
       </div>
