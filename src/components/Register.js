@@ -1,7 +1,5 @@
 import React from "react";
 import { Link, withRouter } from 'react-router-dom';
-import * as auth from '../utils/auth';
-import InfoTooltip from "./InfoTooltip";
 import infoOk from '../images/info_ok.svg';
 import infoError from '../images/info_error.svg';
 
@@ -10,17 +8,10 @@ class Register extends React.Component {
     super(props);
     this.state = {
       email: '',
-      password: '',
-      isDone: false
+      password: ''
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleCloseInfo = this.handleCloseInfo.bind(this);
-    
-  }
-
-  handleCloseInfo() {
-    this.setState({isDone: false});
   }
 
   handleChange(e) {
@@ -33,25 +24,22 @@ class Register extends React.Component {
   handleSubmit(e) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
-    const { email, password } = this.state;
-      auth.register(password, email)
-      .then((res) => {
-        if(res){
-          this.setState({
-            message: 'Вы успешно зарегистрировались!',
-            path: 'sign-in',
-            isDone: true,
-            img: infoOk
-          })
-        } else {
-          this.setState({
-            message: 'Что-то пошло не так! Попробуйте ещё раз.',
-            path: 'sign-up',
-            isDone: true,
-            img: infoError
-          })
-        }
-      });
+    this.props.handleSubmitRegister( this.state.email, this.state.password)
+    .then((res) => {
+      if(res){
+        this.props.openInfo({
+          text: 'Вы успешно зарегистрировались!',
+          path: 'sign-in',
+          img: infoOk
+        });
+      } else {
+        this.props.openInfo({
+          text: 'Что-то пошло не так! Попробуйте ещё раз.',
+          path: 'sign-up',
+          img: infoError
+        });
+      }
+    });
   }
   
   render(){
@@ -67,14 +55,6 @@ class Register extends React.Component {
           <p className="register__signin-text">Уже зарегистрированы?</p>
           <Link to="/sign-in" className="register__link">Войти</Link>
         </div>
-        <InfoTooltip
-        isDone={this.state.isDone}
-        handleCloseInfo={this.handleCloseInfo}
-        history={this.props.history}
-        path={this.state.path}
-        img={this.state.img}
-        text={this.state.message}
-        />
       </div>
     )
   }

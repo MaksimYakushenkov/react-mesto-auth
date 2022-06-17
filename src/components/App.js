@@ -1,7 +1,8 @@
 import React from 'react';
 import { Route, Switch, Link, withRouter, useHistory } from "react-router-dom";
-import * as auth from '../utils/auth';
+import auth from '../utils/auth';
 import ProtectedRoute from './ProtectedRoute ';
+import InfoTooltip from "./InfoTooltip";
 import Login from './Login';
 import Register from './Register';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
@@ -13,6 +14,12 @@ function App() {
   const [isLoggedIn, setIsLoggedIn]  = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
   const [userEmail, setUserEmail] = React.useState('Email here');
+  const [infoData, setInfoData] = React.useState({
+    path: "",
+    img: "",
+    text: ""
+  });
+  const [isDone, setIsDone] = React.useState(false);
   const history = useHistory();
   
   React.useEffect(() => {
@@ -23,15 +30,48 @@ function App() {
     setIsLoggedIn(true);
   }
 
-  function tokenCheck () {
+  function handleCloseInfo() {
+    setIsDone(false);
+  }
+
+  function openInfo(data) {
+    setInfoData({
+      path: data.path,
+      img: data.img,
+      text: data.text
+    });
+    setIsDone(true);
+  }
+
+  function handleSubmitLogin(email, password) {
+    return  auth.authorize(email, password)
+    .then((data) => {
+      return data
+    })
+    .catch(err => console.log(err));
+  }
+
+  function handleSubmitRegister(email, password) {
+    return  auth.register(password, email)
+    .then((data) => {
+      return data
+    })
+    .catch(err => console.log(err));
+  }
+
+  function tokenCheck() {
     const jwt = localStorage.getItem('jwt');
     if (jwt){
-      auth.getContent(jwt).then((res) => {
+      auth.getContent(jwt)
+      .then((res) => {
         if (res){
           setUserEmail(res.data.email);
           setLoggedIn();
           history.push("/");
         }
+      })
+      .catch((err) => {
+        console.log(err);
       }); 
     }
   }
@@ -54,15 +94,23 @@ function App() {
                 <Header>
                   <Link to="/sign-in" className="header__link">Войти</Link>
                 </Header>
-                <Register history={history} />
+                <Register history={history} handleSubmitRegister={handleSubmitRegister} openInfo={openInfo} />
             </Route>
             <Route path="/sign-in">
               <Header>
                 <Link to="/sign-up" className="header__link">Регистрация</Link>
               </Header>
-              <Login handleLogin={setLoggedIn} setUserEmail={setUserEmail} history={history}/>
+              <Login handleLogin={setLoggedIn} setUserEmail={setUserEmail} handleSubmitLogin={handleSubmitLogin} history={history}/>
             </Route>
           </Switch>
+          <InfoTooltip
+            isDone={isDone}
+            handleCloseInfo={handleCloseInfo}
+            history={history}
+            path={infoData.path}
+            img={infoData.img}
+            text={infoData.text}
+          />
           {<Footer />}
         </div>
       </div>

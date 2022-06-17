@@ -57,6 +57,17 @@ function Home(props) {
     });
   }
 
+  React.useEffect(() => {
+    const closeByEscape = (e) => {
+      if (e.key === 'Escape') {
+        closeAllPopups();
+      }
+    }
+
+    document.addEventListener('keydown', closeByEscape)
+    return () => document.removeEventListener('keydown', closeByEscape)
+  }, [])
+
   //Функция лайка карточки
   function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
@@ -66,6 +77,9 @@ function Home(props) {
     api.changeLikeCardStatus(card._id, !isLiked)
     .then((newCard) => {
       setCards((cards) => cards.map((likedCard) => likedCard._id === card._id ? newCard : likedCard));
+    })
+    .catch((err) => {
+      console.log(err);
     });
   }
 
@@ -76,7 +90,10 @@ function Home(props) {
       setCards((cards) => {
         return cards.filter(item => {return item._id !== card._id})
       })
-    ));
+    ))
+    .catch((err) => {
+      console.log(err);
+    });
   }
 
   //Функция обновления данных о пользователе
