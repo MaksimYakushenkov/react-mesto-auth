@@ -26,6 +26,7 @@ class Auth {
 
   authorize(password, email) {
     return fetch(`${this._baseUrl}/signin`, {
+      mode: 'no-cors',
       method: 'POST',
       headers: {
         'Accept': 'application/json',
