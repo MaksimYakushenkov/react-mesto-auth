@@ -44,7 +44,7 @@ function App() {
   }
 
   function handleSubmitLogin(email, password) {
-    return  auth.authorize(email, password)
+    return  auth.authorize(password, email)
     .then((data) => {
       return data
     })
