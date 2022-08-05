@@ -13,7 +13,10 @@ class Api {
   
   getInitialCards() {
     return fetch(`${this._baseUrl}cards`, {
-      headers: this._headers
+      headers: {
+    authorization: `Bearer ${localStorage.getItem('jwt')}`,
+    'Content-Type': 'application/json'
+  }
     })
     .then(res => {
       return this._getResponseData(res);
@@ -23,7 +26,10 @@ class Api {
   setNewCard(newdata) {
     return fetch(`${this._baseUrl}cards`, {
       method: 'POST',
-      headers: this._headers,
+      headers: {
+    authorization: `Bearer ${localStorage.getItem('jwt')}`,
+    'Content-Type': 'application/json'
+  },
       body: JSON.stringify({
         name: newdata.namePlace,
         link: newdata.linkPlace
@@ -37,7 +43,10 @@ class Api {
   deleteUserCard(idCard) {
     return fetch(`${this._baseUrl}cards/${idCard}`, {
       method: 'DELETE',
-      headers: this._headers
+      headers: {
+    authorization: `Bearer ${localStorage.getItem('jwt')}`,
+    'Content-Type': 'application/json'
+  }
     })
     .then(res => {
      return this._getResponseData(res);
@@ -48,7 +57,10 @@ class Api {
     if(isLiked) {
       return fetch(`${this._baseUrl}cards/${idCard}/likes`, {
         method: 'PUT',
-        headers: this._headers
+        headers: {
+    authorization: `Bearer ${localStorage.getItem('jwt')}`,
+    'Content-Type': 'application/json'
+  }
       })
       .then(res => {
        return this._getResponseData(res);
@@ -56,7 +68,10 @@ class Api {
     } else {
       return fetch(`${this._baseUrl}cards/${idCard}/likes`, {
         method: 'DELETE',
-        headers: this._headers
+        headers: {
+    authorization: `Bearer ${localStorage.getItem('jwt')}`,
+    'Content-Type': 'application/json'
+  }
       })
       .then(res => {
        return this._getResponseData(res);
@@ -67,7 +82,10 @@ class Api {
 
   getUserInfo() {
    return fetch(`${this._baseUrl}users/me`, {
-      headers: this._headers
+      headers: {
+    authorization: `Bearer ${localStorage.getItem('jwt')}`,
+    'Content-Type': 'application/json'
+  }
     })
     .then(res => {
      return this._getResponseData(res);
@@ -76,7 +94,10 @@ class Api {
   setNewUserAvatar(newAvatarLink) {
     return fetch(`${this._baseUrl}users/me/avatar`, {
       method: 'PATCH',
-      headers: this._headers,
+      headers: {
+    authorization: `Bearer ${localStorage.getItem('jwt')}`,
+    'Content-Type': 'application/json'
+  },
       body: JSON.stringify({
         avatar: newAvatarLink})
     })
@@ -88,7 +109,10 @@ class Api {
   setNewUserInfo(newValues) {
     return fetch(`${this._baseUrl}users/me`, {
       method: 'PATCH',
-      headers: this._headers,
+      headers: {
+    authorization: `Bearer ${localStorage.getItem('jwt')}`,
+    'Content-Type': 'application/json'
+  },
       body: JSON.stringify({
         name: newValues.name,
         about: newValues.about
@@ -101,11 +125,7 @@ class Api {
 }
 
 const api = new Api({
-  baseUrl: 'https://nomoreparties.co/v1/cohort-40/',
-  headers: {
-    authorization: 'f4ccf291-bfa6-4f7d-8768-52c052475176',
-    'Content-Type': 'application/json'
-  }
+  baseUrl: 'https://api.thebestfront.nomoredomains.sbs/',
 });
 
 export default api;

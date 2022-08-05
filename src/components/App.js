@@ -12,6 +12,7 @@ import Footer from './Footer';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn]  = React.useState(false);
+  const [token, setToken] = React.useState('');
   const [currentUser, setCurrentUser] = React.useState({});
   const [userEmail, setUserEmail] = React.useState('Email here');
   const [infoData, setInfoData] = React.useState({
@@ -68,6 +69,7 @@ function App() {
           setUserEmail(res.data.email);
           setLoggedIn();
           history.push("/");
+
         }
       })
       .catch((err) => {
@@ -78,42 +80,42 @@ function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <div className="App">
-        <div className="page">
-          <Switch>
-            <ProtectedRoute
-              exact path="/"
-              isLoggedIn={isLoggedIn}
-              component={Home}
-              userEmail={userEmail}
-              currentUser={currentUser}
-              setCurrentUser={setCurrentUser}
-              history={history}
-            />
-            <Route path="/sign-up">
+        <div className="App">
+          <div className="page">
+            <Switch>
+              <ProtectedRoute
+                exact path="/"
+                isLoggedIn={isLoggedIn}
+                component={Home}
+                userEmail={userEmail}
+                currentUser={currentUser}
+                setCurrentUser={setCurrentUser}
+                history={history}
+              />
+              <Route path="/sign-up">
+                  <Header>
+                    <Link to="/sign-in" className="header__link">Войти</Link>
+                  </Header>
+                  <Register history={history} handleSubmitRegister={handleSubmitRegister} openInfo={openInfo} />
+              </Route>
+              <Route path="/sign-in">
                 <Header>
-                  <Link to="/sign-in" className="header__link">Войти</Link>
+                  <Link to="/sign-up" className="header__link">Регистрация</Link>
                 </Header>
-                <Register history={history} handleSubmitRegister={handleSubmitRegister} openInfo={openInfo} />
-            </Route>
-            <Route path="/sign-in">
-              <Header>
-                <Link to="/sign-up" className="header__link">Регистрация</Link>
-              </Header>
-              <Login handleLogin={setLoggedIn} setUserEmail={setUserEmail} handleSubmitLogin={handleSubmitLogin} history={history}/>
-            </Route>
-          </Switch>
-          <InfoTooltip
-            isDone={isDone}
-            handleCloseInfo={handleCloseInfo}
-            history={history}
-            path={infoData.path}
-            img={infoData.img}
-            text={infoData.text}
-          />
-          {<Footer />}
+                <Login handleLogin={setLoggedIn} setUserEmail={setUserEmail} handleSubmitLogin={handleSubmitLogin} history={history}/>
+              </Route>
+            </Switch>
+            <InfoTooltip
+              isDone={isDone}
+              handleCloseInfo={handleCloseInfo}
+              history={history}
+              path={infoData.path}
+              img={infoData.img}
+              text={infoData.text}
+            />
+            {<Footer />}
+          </div>
         </div>
-      </div>
     </CurrentUserContext.Provider>
   );
 }

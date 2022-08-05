@@ -6,7 +6,6 @@ import Card from './Card';
 
 function Main(props) {
   const currentUser = React.useContext(CurrentUserContext);
-
   return (
     <main>
       <div className="profile">
@@ -25,7 +24,7 @@ function Main(props) {
       
       {/* Для атрибута key использован id каждой карточки, взятой из ответа запроса API (функция-сетер setCards). Затем здесь мы используем деструктуризацию (берем  id из массива карточек, заданных заранее, и напрямую задаем каждой карточке свой id и передаем другие пропсы). */}
       <div className="elements">
-        {props.cards.map((card) => (<Card key={card._id} {...card} onCardClick={props.handleCardClick} handleCardLike={props.onCardLike} onCardDelete={props.onCardDelete}/>))}
+        {props.cards.map((card) => (<Card key={card._id} {...card} onCardClick={props.handleCardClick} handleCardLike={props.onCardLike} onDeleteCard={props.onDeleteCard}/>))}
       </div>       
     </main>
   );

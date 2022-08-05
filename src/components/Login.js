@@ -35,7 +35,7 @@ class Login extends React.Component {
         this.setState({email: '', password: ''} ,() => {
             this.props.handleLogin();
             this.props.history.push('/');
-        })
+        });
         localStorage.setItem('jwt', data.token);
       } else {
         return

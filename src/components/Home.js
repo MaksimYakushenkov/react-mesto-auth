@@ -7,6 +7,8 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import ImagePopup from './ImagePopup';
+import DeleteCardConfirmPopup from './DeleteCardConfirmPopup';
+
 
 function Home(props) {
   //Необходимые для работы приложения стейты
@@ -14,7 +16,9 @@ function Home(props) {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen]  = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen]  = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen]  = React.useState(false);
+  const [isDeleteCardOpen, setIsDeleteCardOpen]  = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({});
+  const [deleteCard, setDeleteCard] = React.useState({});
   const currentUser = props.currentUser;
   const setCurrentUser = props.setCurrentUser;
 
@@ -22,7 +26,7 @@ function Home(props) {
   React.useEffect(() => {
     api.getInitialCards()
     .then(data => {
-      setCards(data.map((item) => (item)));
+      setCards(data.data.map((item) => (item)));
     })
     .catch((err) => {
       console.log(err);
@@ -33,7 +37,7 @@ function Home(props) {
   React.useEffect(() => {
     api.getUserInfo()
     .then(data => {
-      setCurrentUser(data);
+      setCurrentUser(data.data);
     })
     .catch((err) => {
       console.log(err);
@@ -49,7 +53,7 @@ function Home(props) {
   function handleAddPlaceSubmit(addPlaceValues) {
     api.setNewCard(addPlaceValues)
     .then(data => {
-      setCards([data, ...cards]);
+      setCards([data.data, ...cards]);
       closeAllPopups();
     })
     .catch((err) => {
@@ -71,7 +75,7 @@ function Home(props) {
   //Функция лайка карточки
   function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    const isLiked = card.likes.some(i => i === currentUser._id);
 
     // Отправляем запрос в API и получаем обновлённые данные карточки
     api.changeLikeCardStatus(card._id, !isLiked)
@@ -84,11 +88,11 @@ function Home(props) {
   }
 
   //Функция удаления карточки
-  function handleCardDelete(card) {
-    api.deleteUserCard(card._id)
+  function handleCardDelete() {
+    api.deleteUserCard(deleteCard._id)
     .then((
       setCards((cards) => {
-        return cards.filter(item => {return item._id !== card._id})
+        return cards.filter(item => {return item._id !== deleteCard._id})
       })
     ))
     .catch((err) => {
@@ -100,7 +104,7 @@ function Home(props) {
   function handleUpdateUser(values) {
     api.setNewUserInfo(values)
     .then(data => {
-      setCurrentUser(data);
+      setCurrentUser(data.data);
       closeAllPopups();
     })
     .catch((err) => {
@@ -112,7 +116,7 @@ function Home(props) {
   function handleUpdateAvatar(value) {
     api.setNewUserAvatar(value)
     .then(data => {
-      setCurrentUser(data);
+      setCurrentUser(data.data);
       closeAllPopups();
     })
     .catch((err) => {
@@ -133,11 +137,17 @@ function Home(props) {
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
   }
 
+  function handleDeleteCardClick(card) {
+    setIsDeleteCardOpen(!isDeleteCardOpen);
+    setDeleteCard(card);
+  }
+
   //Функция закрытия всех попапов
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
+    setIsDeleteCardOpen(false);
     setSelectedCard({});
   }
 
@@ -159,10 +169,10 @@ function Home(props) {
         onEditProfile={handleEditProfileClick}
         onAddPlace={handleAddPlaceClick}
         onEditAvatar={handleEditAvatarClick}
+        onDeleteCard={handleDeleteCardClick}
         handleCardClick={handleCardClick}
         cards={cards}
         onCardLike={handleCardLike}
-        onCardDelete={handleCardDelete}
       />
 
       <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
@@ -171,22 +181,16 @@ function Home(props) {
 
       <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
 
+      <DeleteCardConfirmPopup isOpen={isDeleteCardOpen} onClose={closeAllPopups} onDeleteCard={handleCardDelete}/>
 
-      {<PopupWithForm
-        popupName="delete-popup"
-        title="Вы уверены?"
-        buttonText="Да"
-        isOpen={false}
-        onClose={closeAllPopups}>
-          <button className="popup__button popup__confirm-delete">Да</button>
-      </PopupWithForm>}
+      
+      
 
       {<ImagePopup 
       card={selectedCard}
       onClose={closeAllPopups}
       />}
     </div>
-    
   );
 }
 

@@ -54,7 +54,7 @@ class Auth {
 }
 
 const auth = new Auth({
-  baseUrl: 'https://auth.nomoreparties.co'
+  baseUrl: 'https://api.thebestfront.nomoredomains.sbs'
 });
 
 export default auth;
